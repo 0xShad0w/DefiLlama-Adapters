@@ -34,14 +34,16 @@ const ibcMappings = {
 }
 
 const fixBalancesTokens = {
+
+  "naka": {
+    "0xDe4c4768ee70D97C044062fEC971eAE91B6aFAB7": { coingeckoId: "wrapped-bitcoin", decimals: 18 },
+    "0x4F90055b8670B21d64146577152aE52975075900": { coingeckoId: "ethereum", decimals: 18 },
+    "0xBD0adB3Ee21e0A75D3021384177238883D69e883": { coingeckoId: "ordinals", decimals: 18 },
+  },
   // Sample Code
   ozone: {
     // '0x83048f0bf34feed8ced419455a4320a735a92e9d': { coingeckoId: "ozonechain", decimals: 18 }, // was mapped to wrong chain
-  },
-  bitcoin: {
-    BSSB: { coingeckoId: 'bitstable-finance', decimals: 0 },
-    MUBI: { coingeckoId: 'multibit', decimals: 0 },
-  },
+  }
 }
 
 ibcChains.forEach(chain => fixBalancesTokens[chain] = { ...ibcMappings, ...(fixBalancesTokens[chain] || {}) })
@@ -91,7 +93,7 @@ function stripTokenHeader(token, chain) {
   if (chain === 'aptos') return token.replace(/^aptos:/, '')
   token = normalizeAddress(token, chain);
   if (chain && !token.startsWith(chain)) return token;
-  return token.indexOf(":") > -1 ? token.split(":")[1] : token;
+  return token.indexOf(":") > -1 ? token.split(":").slice(1).join(':') : token;
 }
 
 const eulerTokens = [
